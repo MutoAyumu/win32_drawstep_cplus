@@ -43,6 +43,8 @@ protected:
 		//        この位置に生成されるコードを編集しないでください。
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
+public:
+	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 };
 
 #ifndef _DEBUG  // drawview.cpp ファイルがデバッグ環境の時使用されます。

@@ -25,6 +25,7 @@ BEGIN_MESSAGE_MAP(CDrawView, CView)
 	// 標準印刷コマンド
 	ON_COMMAND(ID_FILE_PRINT, CView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_PREVIEW, CView::OnFilePrintPreview)
+	ON_WM_LBUTTONDOWN()
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -93,3 +94,13 @@ CDrawDoc* CDrawView::GetDocument() // デバッグ バージョンでないものはインライン
 
 /////////////////////////////////////////////////////////////////////////////
 // CDrawView クラスのメッセージ ハンドラ
+
+
+void CDrawView::OnLButtonDown(UINT nFlags, CPoint point)
+{
+	// TODO: ここにメッセージ ハンドラー コードを追加するか、既定の処理を呼び出します。
+
+
+
+	CView::OnLButtonDown(nFlags, point);
+}
