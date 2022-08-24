@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.136
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DRAW", "DRAW.vcxproj", "{CEC239FC-737D-4516-ACB4-6BBE59B48E3A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CEC239FC-737D-4516-ACB4-6BBE59B48E3A}.Debug|Win32.ActiveCfg = Debug|Win32
+		{CEC239FC-737D-4516-ACB4-6BBE59B48E3A}.Debug|Win32.Build.0 = Debug|Win32
+		{CEC239FC-737D-4516-ACB4-6BBE59B48E3A}.Release|Win32.ActiveCfg = Release|Win32
+		{CEC239FC-737D-4516-ACB4-6BBE59B48E3A}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C6344DBF-A67A-461E-B4E4-04EE2BE6599E}
+	EndGlobalSection
+EndGlobal
