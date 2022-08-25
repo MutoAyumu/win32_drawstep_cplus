@@ -11,6 +11,8 @@ protected: // シリアライズ機能のみから作成します。
 // アトリビュート
 public:
 	CDrawDoc* GetDocument();
+protected:
+	CPoint _ptStart;	//直線の開始地点
 
 // オペレーション
 public:
@@ -45,6 +47,7 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
+	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
 };
 
 #ifndef _DEBUG  // drawview.cpp ファイルがデバッグ環境の時使用されます。

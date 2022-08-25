@@ -26,6 +26,7 @@ BEGIN_MESSAGE_MAP(CDrawView, CView)
 	ON_COMMAND(ID_FILE_PRINT, CView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_PREVIEW, CView::OnFilePrintPreview)
 	ON_WM_LBUTTONDOWN()
+	ON_WM_LBUTTONUP()
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -34,7 +35,6 @@ END_MESSAGE_MAP()
 CDrawView::CDrawView()
 {
 	// TODO: この場所に構築用のコードを追加してください。
-
 }
 
 CDrawView::~CDrawView()
@@ -98,9 +98,26 @@ CDrawDoc* CDrawView::GetDocument() // デバッグ バージョンでないものはインライン
 
 void CDrawView::OnLButtonDown(UINT nFlags, CPoint point)
 {
-	// TODO: ここにメッセージ ハンドラー コードを追加するか、既定の処理を呼び出します。
+	// TODO: ここにメッセージ ハンドラー コードを追加するか、既定の処理を呼び出
 
+	CWnd::SetCapture();
 
+	_ptStart = point;
 
 	CView::OnLButtonDown(nFlags, point);
+}
+
+
+void CDrawView::OnLButtonUp(UINT nFlags, CPoint point)
+{
+	// TODO: ここにメッセージ ハンドラー コードを追加するか、既定の処理を呼び出します。
+
+	if (CWnd::GetCapture() == this->m_hWnd)
+	{
+
+	}
+
+	CView::OnLButtonUp(nFlags, point);
+
+	::ReleaseCapture();
 }
