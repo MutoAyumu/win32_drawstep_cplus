@@ -12,7 +12,7 @@
 static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
-CPoint m_ptStart;
+//CPoint m_ptStart;
 
 /////////////////////////////////////////////////////////////////////////////
 // CDrawView
@@ -29,6 +29,7 @@ BEGIN_MESSAGE_MAP(CDrawView, CView)
 	ON_COMMAND(ID_FILE_PRINT_PREVIEW, CView::OnFilePrintPreview)
 	ON_WM_LBUTTONDOWN()
 	ON_WM_LBUTTONUP()
+	ON_WM_MOUSEMOVE()
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -104,10 +105,38 @@ void CDrawView::OnLButtonDown(UINT nFlags, CPoint point)
 
 	SetCapture();
 	m_ptStart = point;
+	m_ptPrev = point;
+
+	m_pShapeCur = new CLine(point,point);
+
+	CClientDC dc(this);
+	m_pShapeCur->NotOutline(&dc);
 
 	CView::OnLButtonDown(nFlags, point);
 }
 
+void CDrawView::OnMouseMove(UINT nFlags, CPoint point)
+{
+	// TODO: ここにメッセージ ハンドラー コードを追加するか、既定の処理を呼び出します。
+
+	if (GetCapture() == this)
+	{
+		CClientDC dc(this);
+		dc.SetROP2(R2_NOT);
+
+		dc.MoveTo(m_ptStart);
+		dc.LineTo(m_ptPrev);
+
+		dc.SetROP2(R2_NOT);
+
+		dc.MoveTo(m_ptStart);
+		dc.LineTo(point);
+
+		m_ptPrev = point;
+	}
+
+	CView::OnMouseMove(nFlags, point);
+}
 
 void CDrawView::OnLButtonUp(UINT nFlags, CPoint point)
 {
@@ -117,8 +146,15 @@ void CDrawView::OnLButtonUp(UINT nFlags, CPoint point)
 	{
 		CClientDC dc(this);
 
+		dc.SetROP2(R2_NOT);
+		dc.MoveTo(m_ptStart);
+		dc.LineTo(m_ptPrev);
+
+		dc.SetROP2(R2_NOT);
 		dc.MoveTo(m_ptStart);
 		dc.LineTo(point);
+
+		free(m_pShapeCur);
 	}
 
 	ReleaseCapture();
