@@ -106,5 +106,32 @@ CShape* CDrawDoc::NewShape(CPoint point)
 	CLine* line = new CLine(point, point);
 	m_shapeList.AddTail(line);
 
-	void SetModifiedFlag(BOOL bModified = TRUE);
+	SetModifiedFlag();
+
+	return line;
+}
+
+void CDrawDoc::DeleteContents()
+{
+	while (!m_shapeList.IsEmpty())
+	{
+		CShape* shape = m_shapeList.RemoveHead();
+		delete shape;
+	}
+
+	SetModifiedFlag();
+
+	CDocument::DeleteContents();
+}
+
+void CDrawDoc::DrawShapeList(CDC* pDC)
+{
+	POSITION p;
+	p = m_shapeList.GetHeadPosition();
+
+	while(p != NULL)
+	{
+		CShape* shape = m_shapeList.GetNext(p);
+		shape->DrawShape(pDC);
+	}
 }

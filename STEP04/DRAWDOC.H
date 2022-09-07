@@ -13,7 +13,7 @@ protected: // シリアライズ機能のみから作成します。
 public:
 
 protected:
-	CTypedPtrList<CObject, CShape*> m_shapeList;
+	CTypedPtrList<CObList, CShape*> m_shapeList;
 
 // オペレーション
 public:

@@ -50,6 +50,7 @@ CDrawView::~CDrawView()
 void CDrawView::OnDraw(CDC* pDC)
 {
 	CDrawDoc* pDoc = GetDocument();
+	pDoc->DrawShapeList(pDC);
 	ASSERT_VALID(pDoc);
 
 	// TODO: この場所にネイティブ データ用の描画コードを追加します。
@@ -104,8 +105,9 @@ void CDrawView::OnLButtonDown(UINT nFlags, CPoint point)
 	// TODO: ここにメッセージ ハンドラー コードを追加するか、既定の処理を呼び出
 
 	SetCapture();
-	m_ptStart = point;
-	m_ptPrev = point;
+
+	CDrawDoc* d = GetDocument();
+	d->NewShape(point);
 
 	m_pShapeCur = new CLine(point,point);
 
@@ -122,17 +124,9 @@ void CDrawView::OnMouseMove(UINT nFlags, CPoint point)
 	if (GetCapture() == this)
 	{
 		CClientDC dc(this);
-		dc.SetROP2(R2_NOT);
-
-		dc.MoveTo(m_ptStart);
-		dc.LineTo(m_ptPrev);
-
-		dc.SetROP2(R2_NOT);
-
-		dc.MoveTo(m_ptStart);
-		dc.LineTo(point);
-
-		m_ptPrev = point;
+		m_pShapeCur->NotOutline(&dc);
+		m_pShapeCur->SetEndPoint(point);
+		m_pShapeCur->NotOutline(&dc);
 	}
 
 	CView::OnMouseMove(nFlags, point);
@@ -145,16 +139,10 @@ void CDrawView::OnLButtonUp(UINT nFlags, CPoint point)
 	if (GetCapture() == this)
 	{
 		CClientDC dc(this);
-
-		dc.SetROP2(R2_NOT);
-		dc.MoveTo(m_ptStart);
-		dc.LineTo(m_ptPrev);
-
-		dc.SetROP2(R2_NOT);
-		dc.MoveTo(m_ptStart);
-		dc.LineTo(point);
-
-		free(m_pShapeCur);
+		m_pShapeCur->NotOutline(&dc);
+		m_pShapeCur->SetEndPoint(point);
+		m_pShapeCur->NotOutline(&dc);
+		delete(m_pShapeCur);
 	}
 
 	ReleaseCapture();
