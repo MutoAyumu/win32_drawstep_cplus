@@ -135,3 +135,12 @@ void CDrawDoc::DrawShapeList(CDC* pDC)
 		shape->DrawShape(pDC);
 	}
 }
+
+void CShape::NotOutline(CDC* pDC)
+{
+	int rop = pDC->GetROP2();
+
+	pDC->SetROP2(R2_NOT);
+	DrawShape(pDC);
+	pDC->SetROP2(rop);
+}

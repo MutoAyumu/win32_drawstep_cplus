@@ -55,26 +55,31 @@ protected:
 
 //CShape
 
-class CShape : public CObject
+class CShape:public CObject
 {
+	DECLARE_SERIAL(CShape)
+protected:
+	CShape(){}
+
 public:
 	// 図形描画関数のインタフェースを規定する
-	virtual void DrawShape(CDC* pDC) = 0;
+	virtual void DrawShape(CDC* pDC){}
 	// 作成中の図形の“終了点”を変更する
-	virtual void SetEndPoint(CPoint ptEnd) = 0;
+	virtual void SetEndPoint(CPoint ptEnd) {}
 	// 図形を反転する
-	void NotOutline(CDC* pDC)
-	{
-		int rop = pDC->GetROP2();
+	void NotOutline(CDC* pDC);
 
-		pDC->SetROP2(R2_NOT);
-		DrawShape(pDC);
-		pDC->SetROP2(rop);
-	}
+public:
+	virtual void Serialize(CArchive& ar);
 };
 
 class CLine : public CShape
 {
+	DECLARE_SERIAL(CLine)
+protected:
+
+	CLine(){}
+
 	// コンストラクタ
 public:
 	CLine(CPoint ptStart, CPoint ptEnd);
@@ -90,4 +95,23 @@ public:
 	// アトリビュート
 	CPoint m_ptStart;	//直線の開始点
 	CPoint m_ptEnd;		//直線の終了点
+
+protected:
+
+public:
+	virtual void Serialize(CArchive& ar);
 };
+
+IMPLEMENT_SERIAL(CShape, CObject, 1);
+
+void CShape::Serialize(CArchive& ar)
+{
+
+}
+
+IMPLEMENT_SERIAL(CLine, CShape, 1);
+
+void CLine::Serialize(CArchive& ar)
+{
+	//ここ
+}
