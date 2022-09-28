@@ -29,7 +29,7 @@ END_MESSAGE_MAP()
 CDrawDoc::CDrawDoc()
 {
 	// TODO: ここにクラスの構築コードを追加します。
-
+	m_idShapeCur = ID_SHAPE_LINE;
 }
 
 CDrawDoc::~CDrawDoc()
@@ -63,6 +63,7 @@ void CDrawDoc::Serialize(CArchive& ar)
 		// TODO: この位置に読み込み用のコードを追加してください。
 	}
 }
+
 
 /////////////////////////////////////////////////////////////////////////////
 // CDrawDoc クラスの診断
@@ -105,12 +106,14 @@ void CLine::DrawShape(CDC* pDC)
 
 CShape* CDrawDoc::NewShape(CPoint point)
 {
-	CLine* line = new CLine(point, point);
-	m_shapeList.AddTail(line);
-
 	SetModifiedFlag();
 
-	return line;
+	if (m_idShapeCur == ID_SHAPE_LINE)
+	{
+		CLine* line = new CLine(point, point);
+		m_shapeList.AddTail(line);
+		return line;
+	}
 }
 
 void CDrawDoc::DeleteContents()
@@ -137,6 +140,25 @@ void CDrawDoc::DrawShapeList(CDC* pDC)
 		shape->DrawShape(pDC);
 	}
 }
+
+void CShape::NotOutline(CDC* pDC)
+{
+	//以前のラスタオペレーションモードを保存しておく。
+	int rop = pDC->GetROP2();
+	//以前選択されていたブラシは保存しておく。
+	CBrush* stock = pDC->GetCurrentBrush();
+	//デバイスコンテキストにNULL_BRUSHを選択する。
+	pDC->SelectStockObject(NULL_BRUSH);
+	//ラスタオペレーションモードをR2_NOT(反転)とする。
+	pDC->SetROP2(R2_NOT);
+	//当関数を起動した派生クラスオブジェクトのDrawShape仮想関数を呼び出す。
+	DrawShape(pDC);
+	//デバイスコンテキストのブラシを以前の状態に戻す。
+	pDC->SelectObject(stock);
+	//デバイスコンテキストのラスタオペレーションモードを以前の状態に戻す.
+	pDC->SetROP2(rop);
+}
+
 IMPLEMENT_SERIAL(CShape, CObject, 1)
 void CShape::Serialize(CArchive& ar)
 {
@@ -157,4 +179,70 @@ void CLine::Serialize(CArchive& ar)
 		ar >> m_ptStart;
 		ar >> m_ptEnd;
 	}
+}
+
+//CBox
+IMPLEMENT_SERIAL(CBox, CShape, 1)
+
+CBox::CBox(CRect rect)
+{
+	m_rcBox = rect;
+}
+
+void CBox::SetEndPoint(CPoint ptEnd)
+{
+	CRect rect = m_rcBox;
+	rect.SetRect(rect.TopLeft(), ptEnd);
+	m_rcBox = rect;
+}
+
+void CBox::Normalize()
+{
+	m_rcBox.NormalizeRect();
+}
+
+void CBox::Serialize(CArchive& ar)
+{
+	CShape::Serialize(ar);
+
+	if (ar.IsStoring())
+	{
+		ar << m_rcBox;
+	}
+	else
+	{
+		ar >> m_rcBox;
+	}
+}
+
+//Rectangle
+
+IMPLEMENT_SERIAL(CRectangle, CBox, 1)
+
+CRectangle::CRectangle(CRect rect)
+{
+	m_rcBox = rect;
+}
+
+void CRectangle::Serialize(CArchive& ar)
+{
+	CBox::Serialize(ar);
+}
+
+// CRectangle
+IMPLEMENT_SERIAL(CEllipse, CBox, 1)
+
+CEllipse::CEllipse(CRect rect)
+{
+	m_rcBox = rect;
+}
+
+void CEllipse::DrawShape(CDC* pDC)
+{
+	pDC->Ellipse(m_rcBox);
+}
+
+void CEllipse::Serialize(CArchive& ar)
+{
+	CBox::Serialize(ar);
 }
