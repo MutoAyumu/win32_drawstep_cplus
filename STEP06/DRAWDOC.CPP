@@ -21,6 +21,12 @@ BEGIN_MESSAGE_MAP(CDrawDoc, CDocument)
 		// NOTE - ClassWizard はこの位置にマッピング用のマクロを追加または削除します。
 		//        この位置に生成されるコードを編集しないでください。
 	//}}AFX_MSG_MAP
+	ON_COMMAND(ID_32772, &CDrawDoc::OnShapeLine)
+	ON_COMMAND(ID_32773, &CDrawDoc::OnShapeRectangle)
+	ON_COMMAND(ID_32774, &CDrawDoc::OnShapeEllipse)
+	ON_UPDATE_COMMAND_UI(ID_32772, &CDrawDoc::OnUpdateShapeLine)
+	ON_UPDATE_COMMAND_UI(ID_32773, &CDrawDoc::OnUpdateShapeRectangle)
+	ON_UPDATE_COMMAND_UI(ID_32774, &CDrawDoc::OnUpdateShapeEllipse)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -113,6 +119,22 @@ CShape* CDrawDoc::NewShape(CPoint point)
 		CLine* line = new CLine(point, point);
 		m_shapeList.AddTail(line);
 		return line;
+	}
+	else if (m_idShapeCur == ID_SHAPE_RECTANGLE)
+	{
+		CRect rect = new CRect();
+		rect.SetRect(point,point);
+		CRectangle* rectAngle = new CRectangle(rect);
+		m_shapeList.AddTail(rectAngle);
+		return rectAngle;
+	}
+	else if (m_idShapeCur == ID_SHAPE_ELLIPSE)
+	{
+		CRect rect = new CRect();
+		rect.SetRect(point, point);
+		CEllipse* ellipse = new CEllipse(rect);
+		m_shapeList.AddTail(ellipse);
+		return ellipse;
 	}
 }
 
@@ -215,13 +237,13 @@ void CBox::Serialize(CArchive& ar)
 	}
 }
 
-//Rectangle
+//CRectangle
 
 IMPLEMENT_SERIAL(CRectangle, CBox, 1)
 
-CRectangle::CRectangle(CRect rect)
+void CRectangle::DrawShape(CDC* pDC)
 {
-	m_rcBox = rect;
+	pDC->Rectangle(m_rcBox);
 }
 
 void CRectangle::Serialize(CArchive& ar)
@@ -229,13 +251,8 @@ void CRectangle::Serialize(CArchive& ar)
 	CBox::Serialize(ar);
 }
 
-// CRectangle
+// CEllipse
 IMPLEMENT_SERIAL(CEllipse, CBox, 1)
-
-CEllipse::CEllipse(CRect rect)
-{
-	m_rcBox = rect;
-}
 
 void CEllipse::DrawShape(CDC* pDC)
 {
@@ -245,4 +262,66 @@ void CEllipse::DrawShape(CDC* pDC)
 void CEllipse::Serialize(CArchive& ar)
 {
 	CBox::Serialize(ar);
+}
+
+void CDrawDoc::OnShapeLine()
+{
+	// TODO: ここにコマンド ハンドラー コードを追加します。
+	m_idShapeCur = ID_SHAPE_LINE;
+}
+
+
+void CDrawDoc::OnShapeRectangle()
+{
+	// TODO: ここにコマンド ハンドラー コードを追加します。
+	m_idShapeCur = ID_SHAPE_RECTANGLE;
+}
+
+
+void CDrawDoc::OnShapeEllipse()
+{
+	// TODO: ここにコマンド ハンドラー コードを追加します。
+	m_idShapeCur = ID_SHAPE_ELLIPSE;
+}
+
+
+void CDrawDoc::OnUpdateShapeLine(CCmdUI* pCmdUI)
+{
+	// TODO:ここにコマンド更新 UI ハンドラー コードを追加します。
+	if (m_idShapeCur == ID_SHAPE_LINE)
+	{
+		pCmdUI->SetCheck(true);
+	}
+	else
+	{
+		pCmdUI->SetCheck(false);
+	}
+}
+
+
+void CDrawDoc::OnUpdateShapeRectangle(CCmdUI* pCmdUI)
+{
+	// TODO:ここにコマンド更新 UI ハンドラー コードを追加します。
+	if (m_idShapeCur == ID_SHAPE_RECTANGLE)
+	{
+		pCmdUI->SetCheck(true);
+	}
+	else
+	{
+		pCmdUI->SetCheck(false);
+	}
+}
+
+
+void CDrawDoc::OnUpdateShapeEllipse(CCmdUI* pCmdUI)
+{
+	// TODO:ここにコマンド更新 UI ハンドラー コードを追加します。
+	if (m_idShapeCur == ID_SHAPE_ELLIPSE)
+	{
+		pCmdUI->SetCheck(true);
+	}
+	else
+	{
+		pCmdUI->SetCheck(false);
+	}
 }

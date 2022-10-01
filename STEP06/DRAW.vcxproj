@@ -157,6 +157,7 @@
   <ItemGroup>
     <Image Include="res\draw.ico" />
     <Image Include="res\drawdoc.ico" />
+    <Image Include="RES\TOOLBAR (3).BMP" />
     <Image Include="res\toolbar.bmp" />
   </ItemGroup>
   <ItemGroup>

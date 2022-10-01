@@ -121,6 +121,7 @@ protected:
 		// メッセージハンドラがありません。
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
+public:
 };
 
 CAboutDlg::CAboutDlg() : CDialog(CAboutDlg::IDD)

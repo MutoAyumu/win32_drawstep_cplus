@@ -62,6 +62,13 @@ protected:
 		//        この位置に生成されるコードを編集しないでください。
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
+public:
+	afx_msg void OnShapeLine();
+	afx_msg void OnShapeRectangle();
+	afx_msg void OnShapeEllipse();
+	afx_msg void OnUpdateShapeLine(CCmdUI* pCmdUI);
+	afx_msg void OnUpdateShapeRectangle(CCmdUI* pCmdUI);
+	afx_msg void OnUpdateShapeEllipse(CCmdUI* pCmdUI);
 };
 
 /////////////////////////////////////////////////////////////////////////////
@@ -74,10 +81,10 @@ class CShape : public CObject
 protected:
 	CShape(){}
 public:
-	// 図形描画関数のインタフェースを規定する
-	virtual void DrawShape(CDC* pDC) {}
 	// 作成中の図形の“終了点”を変更する
 	virtual void SetEndPoint(CPoint ptEnd) {}
+	// 図形描画関数のインタフェースを規定する
+	virtual void DrawShape(CDC* pDC) {}
 	// 図形を反転する
 	void NotOutline(CDC* pDC);
 	// 図形を正規化するためのインターフェースを規定する

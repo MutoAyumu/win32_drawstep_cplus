@@ -4,3 +4,4 @@ C:\PS21\Win32DrawStepC++\STEP02\WinDebug\DRAW.exe
 C:\PS21\Win32DrawStepC++\STEP03\WinDebug\DRAW.exe
 C:\PS21\Win32DrawStepC++\STEP04\WinDebug\DRAW.exe
 C:\PS21\Win32DrawStepC++\STEP05\WinDebug\DRAW.exe
+C:\PS21\Win32DrawStepC++\STEP06\WinDebug\DRAW.exe
